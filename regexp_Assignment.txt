@@ -1,0 +1,193 @@
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 5.7.32-log MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2020, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| assignment1        |
+| assignment2        |
+| assignment3        |
+| assignment7        |
+| day1               |
+| day2               |
+| edac               |
+| ehandling          |
+| emp                |
+| index1             |
+| mysql              |
+| performance_schema |
+| practice           |
+| project            |
+| regexp_assignment  |
+| sakila             |
+| stored_procedure   |
+| student            |
+| sys                |
+| trigger12          |
+| world              |
++--------------------+
+22 rows in set (0.06 sec)
+
+mysql> use regexp_assignment;
+Database changed
+mysql> show tables;
++-----------------------------+
+| Tables_in_regexp_assignment |
++-----------------------------+
+| emp                         |
++-----------------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from emp;
++------+--------+
+| eid  | name   |
++------+--------+
+|  101 | schemy |
+|  102 | sarang |
+|  103 | mahesh |
+|  104 | manish |
+|  105 | tution |
+|  106 | teasae |
+|  107 | tea    |
++------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select name from emp where regexp '^sc';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'regexp '^sc'' at line 1
+mysql> select name from emp where name regexp '^sc';
++--------+
+| name   |
++--------+
+| schemy |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select name from emp where name regexp 'ng$';
++--------+
+| name   |
++--------+
+| sarang |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select name from emp where name regexp 'io | ea';
+Empty set (0.00 sec)
+
+mysql> select name from emp where name regexp 'io|ea';
++--------+
+| name   |
++--------+
+| tution |
+| teasae |
+| tea    |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> select name from emp where name regexp '[s,d]';
++--------+
+| name   |
++--------+
+| schemy |
+| sarang |
+| mahesh |
+| manish |
+| teasae |
++--------+
+5 rows in set (0.00 sec)
+
+mysql> 5.CREATE TABLE tutorial (
+    -> id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    -> title VARCHAR(200),
+    -> description TEXT,
+    -> FULLTEXT(title,description)
+    -> ) ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '5.CREATE TABLE tutorial (
+id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+' at line 1
+mysql> CREATE TABLE tutorial (
+    -> id INT UNSIGNED AUTO_INCREMENT NOT NULL PRIMARY KEY,
+    -> title VARCHAR(200),
+    -> description TEXT,
+    -> FULLTEXT(title,description)
+    -> ) ;
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> INSERT INTO tutorial (title,description) VALUES
+    -> ('SQL Joins','An SQL JOIN clause combines rows from two or more tables. It creates a set of rows in a temporary table.'),
+    -> ('SQL Equi Join','SQL EQUI JOIN performs a JOIN against equality or matching column(s) values of the associated tables. An equal sign (=) is used as comparison operator in the where clause to refer equality.'),
+    -> ('SQL Left Join','The SQL LEFT JOIN, joins two tables and fetches rows based on a condition, which is matching in both the tables and the unmatched rows will also be available from the table before the JOIN clause.'),
+    -> ('SQL Cross Join','The SQL CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table, if no WHERE clause is used along with CROSS JOIN.'),
+    -> ('SQL Full Outer Join','In SQL the FULL OUTER JOIN combines the results of both left and right outer joins and returns all (matched or unmatched) rows from the tables on both sides of the join clause.'),
+    -> ('SQL Self Join','A self join is a join in which a table is joined with itself (which is also called Unary relationships), especially when the table has a FOREIGN KEY which references its own PRIMARY KEY.');
+Query OK, 6 rows affected (0.06 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from tutorial;
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id | title               | description                                                                                                                                                                                          |
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  1 | SQL Joins           | An SQL JOIN clause combines rows from two or more tables. It creates a set of rows in a temporary table.                                                                                             |
+|  2 | SQL Equi Join       | SQL EQUI JOIN performs a JOIN against equality or matching column(s) values of the associated tables. An equal sign (=) is used as comparison operator in the where clause to refer equality.        |
+|  3 | SQL Left Join       | The SQL LEFT JOIN, joins two tables and fetches rows based on a condition, which is matching in both the tables and the unmatched rows will also be available from the table before the JOIN clause. |
+|  4 | SQL Cross Join      | The SQL CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table, if no WHERE clause is used along with CROSS JOIN.      |
+|  5 | SQL Full Outer Join | In SQL the FULL OUTER JOIN combines the results of both left and right outer joins and returns all (matched or unmatched) rows from the tables on both sides of the join clause.                     |
+|  6 | SQL Self Join       | A self join is a join in which a table is joined with itself (which is also called Unary relationships), especially when the table has a FOREIGN KEY which references its own PRIMARY KEY.           |
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from tutorial where match(title,description) aginst('left+right' in boolean mode);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'aginst('left+right' in boolean mode)' at line 1
+mysql> select * from tutorial where match(title,description) against('left+right' in boolean mode);
++----+---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id | title               | description                                                                                                                                                                      |
++----+---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  5 | SQL Full Outer Join | In SQL the FULL OUTER JOIN combines the results of both left and right outer joins and returns all (matched or unmatched) rows from the tables on both sides of the join clause. |
++----+---------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.06 sec)
+
+mysql> select * from tutorial where match(title,description) against('number+rows' in boolean mode);
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id | title               | description                                                                                                                                                                                          |
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  4 | SQL Cross Join      | The SQL CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table, if no WHERE clause is used along with CROSS JOIN.      |
+|  1 | SQL Joins           | An SQL JOIN clause combines rows from two or more tables. It creates a set of rows in a temporary table.                                                                                             |
+|  3 | SQL Left Join       | The SQL LEFT JOIN, joins two tables and fetches rows based on a condition, which is matching in both the tables and the unmatched rows will also be available from the table before the JOIN clause. |
+|  5 | SQL Full Outer Join | In SQL the FULL OUTER JOIN combines the results of both left and right outer joins and returns all (matched or unmatched) rows from the tables on both sides of the join clause.                     |
++----+---------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from tutorial where match(title,description) against('which+is' in boolean mode);
+Empty set (0.00 sec)
+
+mysql> select * from tutorial where match(title,description) against('which+the' in boolean mode);
+Empty set (0.06 sec)
+
+mysql> select * from tutorial where match(title,description) against('which+the' in natural mode);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'mode)' at line 1
+mysql> SELECT * FROM tutorial WHERE MATCH(title,description) AGAINST(count('left') in boolean mode);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> SELECT * FROM tutorial WHERE MATCH(title,description) AGAINST('+join -right'in boolean mode);
++----+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| id | title          | description                                                                                                                                                                                          |
++----+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  2 | SQL Equi Join  | SQL EQUI JOIN performs a JOIN against equality or matching column(s) values of the associated tables. An equal sign (=) is used as comparison operator in the where clause to refer equality.        |
+|  3 | SQL Left Join  | The SQL LEFT JOIN, joins two tables and fetches rows based on a condition, which is matching in both the tables and the unmatched rows will also be available from the table before the JOIN clause. |
+|  4 | SQL Cross Join | The SQL CROSS JOIN produces a result set which is the number of rows in the first table multiplied by the number of rows in the second table, if no WHERE clause is used along with CROSS JOIN.      |
+|  6 | SQL Self Join  | A self join is a join in which a table is joined with itself (which is also called Unary relationships), especially when the table has a FOREIGN KEY which references its own PRIMARY KEY.           |
+|  1 | SQL Joins      | An SQL JOIN clause combines rows from two or more tables. It creates a set of rows in a temporary table.                                                                                             |
++----+----------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+5 rows in set (0.00 sec)
+
+mysql>
